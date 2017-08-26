@@ -70,7 +70,15 @@ public class WordsMananger : MonoBehaviour {
     public void OnStartFilp()
     {
         //防止翻过头报错
-        if (book.currentPage >= maxPage) return;
+        if (book.currentPage >= maxPage)
+        {
+            choiceStrL = choiceStrR;
+            choiceStrR = new string[4];
+            meansR = "";
+            SyncChoiceWithStrL();
+            SyncChoiceWithStrR();
+            return;
+        }
         choiceStrL = choiceStrR;
         choiceStrR = choiceList[book.currentPage / 2];
         meansR = meansList[book.currentPage / 2];
