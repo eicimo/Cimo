@@ -24,9 +24,14 @@ public class WordsMananger : MonoBehaviour {
     public List<string[]> choiceList;
     //储存意思列表引用
     public List<string> meansList;
+    //储存答案
+    public List<int> ansList;
+    public List<string> ansListStr;
+
+    private int ansNumber = 0;
 
     // Use this for initialization
-    void Start ()
+    void Awake ()
     {
 
         book = GetComponent<Book>();
@@ -39,19 +44,38 @@ public class WordsMananger : MonoBehaviour {
         SyncChoiceWithStrL();
     }
 	
+    //初始化单词列表
     void InitChoiceList()
     {
         choiceList = new List<string[]>(4);
         choiceList.Add( new string[] { "pause", "challenge", "shear", "hang" });
         choiceList.Add( new string[] { "1", "2", "3", "4" });
         choiceList.Add( new string[] { "m", "n", "p", "q" });
-        choiceList.Add( new string[] { "e", "d", "f", "g" });
+        choiceList.Add( new string[] { "e", "d", "p", "g" });
 
         meansList = new List<string>(4);
         meansList.Add( "n.剪切，剪刀；vi.剪切，修剪，穿越；vt.剪去，剥夺");
-        meansList.Add( "number");
-        meansList.Add("mnpq");
-        meansList.Add( "edfg");
+        meansList.Add( "number-1");
+        meansList.Add("mnpq-n");
+        meansList.Add( "edfg-p");
+
+        ansListStr.Add("shear");
+        ansListStr.Add("1");
+        ansListStr.Add("n");
+        ansListStr.Add("p");
+
+        int choiceListSize = choiceList.Count;
+        for (int i = 0; i < choiceListSize; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if(choiceList[i][j] == ansListStr[i])
+                {
+                    ansList.Add(j);
+                    break;
+                }
+            }
+        }
     }
 
 	// Update is called once per frame
@@ -106,5 +130,13 @@ public class WordsMananger : MonoBehaviour {
         {
             choicesRight[i].text = choiceStrR[i];
         }
+    }
+
+    //用于处理点击后是否选择正确
+    public void OnClickButton(int ans)
+    {
+        ansNumber = ansList[book.currentPage / 2 - 1];
+        if (ans == ansNumber) Debug.Log("true");
+        else Debug.Log("false");
     }
 }

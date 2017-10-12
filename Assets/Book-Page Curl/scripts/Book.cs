@@ -130,7 +130,7 @@ public class Book : MonoBehaviour {
         if (T0_T1_Angle < 0) T0_T1_Angle += 180;
 
         ClippingPlane.transform.eulerAngles = new Vector3(0, 0, T0_T1_Angle - 90);
-        ClippingPlane.transform.position = BookPanel.TransformPoint(t1);
+        ClippingPlane.transform.position = BookPanel.TransformPoint(t1) + Vector3.back * 15;
 
         //page position and angle
         Left.transform.position =BookPanel.TransformPoint( c);
@@ -165,17 +165,17 @@ public class Book : MonoBehaviour {
 
         ClippingPlane.rectTransform.pivot = new Vector2(1, 0.35f);
         ClippingPlane.transform.eulerAngles = new Vector3(0, 0, T0_T1_Angle + 90);
-        ClippingPlane.transform.position = BookPanel.TransformPoint(t1);
+        ClippingPlane.transform.position = BookPanel.TransformPoint(t1) + Vector3.back * 15 ;
 
         //page position and angle
-        Right.transform.position = BookPanel.TransformPoint(c);
+        Right.transform.position = BookPanel.TransformPoint(c) + Vector3.back * 25;
         float C_T1_dy = t1.y - c.y;
         float C_T1_dx = t1.x - c.x;
         float C_T1_Angle = Mathf.Atan2(C_T1_dy, C_T1_dx) * Mathf.Rad2Deg;
         Right.transform.eulerAngles = new Vector3(0, 0, C_T1_Angle);
 
         NextPageClip.transform.eulerAngles = new Vector3(0, 0, T0_T1_Angle + 90);
-        NextPageClip.transform.position = BookPanel.TransformPoint(t1);
+        NextPageClip.transform.position = BookPanel.TransformPoint(t1) + Vector3.back*15;
         RightNext.transform.SetParent(NextPageClip.transform, true);
         Left.transform.SetParent(ClippingPlane.transform, true);
         Left.transform.SetAsFirstSibling();
@@ -278,7 +278,7 @@ public class Book : MonoBehaviour {
         ClippingPlane.rectTransform.pivot = new Vector2(0, 0.35f);
 
         Right.gameObject.SetActive(true);
-        Right.transform.position = LeftNext.transform.position;
+        Right.transform.position = LeftNext.transform.position + Vector3.back * 25;
         Right.sprite = bookPages[currentPage - 1];
         Right.transform.eulerAngles = new Vector3(0, 0, 0);
         Right.transform.SetAsFirstSibling();
