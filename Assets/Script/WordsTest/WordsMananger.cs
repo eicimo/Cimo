@@ -30,6 +30,8 @@ public class WordsMananger : MonoBehaviour {
 
     private int ansNumber = 0;
 
+    public GameObject maskR;
+
     // Use this for initialization
     void Awake ()
     {
@@ -86,6 +88,7 @@ public class WordsMananger : MonoBehaviour {
     //结束翻动执行
     public void OnEndFilp()
     {
+        maskR.SetActive(false);
         meansL = meansR;
         SyncChoiceWithStrL();
     }
@@ -93,6 +96,7 @@ public class WordsMananger : MonoBehaviour {
     //开始翻动执行
     public void OnStartFilp()
     {
+        maskR.SetActive(true);
         //防止翻过头报错
         if (book.currentPage >= maxPage)
         {
