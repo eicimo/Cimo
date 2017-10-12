@@ -8,14 +8,15 @@ public enum FlipMode
     LeftToRight
 }
 [ExecuteInEditMode]
-public class Book : MonoBehaviour {
+public class Book : MonoBehaviour
+{
     public Canvas canvas;
     [SerializeField]
     RectTransform BookPanel;
     public Sprite background;
     public Sprite[] bookPages;
-    public bool interactable=true;
-    public bool enableShadowEffect=true;
+    public bool interactable = true;
+    public bool enableShadowEffect = true;
     //represent the index of the sprite shown in the right page
     public int currentPage = 0;
     public int TotalPageCount
@@ -34,7 +35,7 @@ public class Book : MonoBehaviour {
     {
         get
         {
-            return BookPanel.rect.height ; 
+            return BookPanel.rect.height;
         }
     }
     public Image ClippingPlane;
@@ -67,8 +68,8 @@ public class Book : MonoBehaviour {
     {
         float scaleFactor = 1;
         if (canvas) scaleFactor = canvas.scaleFactor;
-        float pageWidth = (BookPanel.rect.width* scaleFactor - 1) / 2;
-        float pageHeight = BookPanel.rect.height* scaleFactor;
+        float pageWidth = (BookPanel.rect.width * scaleFactor - 1) / 2;
+        float pageHeight = BookPanel.rect.height * scaleFactor;
         Left.gameObject.SetActive(false);
         Right.gameObject.SetActive(false);
         UpdateSprites();
@@ -84,7 +85,7 @@ public class Book : MonoBehaviour {
         float scaledPageWidth = pageWidth / scaleFactor;
         float scaledPageHeight = pageHeight / scaleFactor;
         radius2 = Mathf.Sqrt(scaledPageWidth * scaledPageWidth + scaledPageHeight * scaledPageHeight);
-        ClippingPlane.rectTransform.sizeDelta = new Vector2(scaledPageWidth*2, scaledPageHeight + scaledPageWidth * 2);
+        ClippingPlane.rectTransform.sizeDelta = new Vector2(scaledPageWidth * 2, scaledPageHeight + scaledPageWidth * 2);
         Shadow.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + scaledPageWidth * 0.6f);
         ShadowLTR.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + scaledPageWidth * 0.6f);
         NextPageClip.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + scaledPageWidth * 0.6f);
@@ -97,7 +98,7 @@ public class Book : MonoBehaviour {
     }
     void Update()
     {
-        if (pageDragging&&interactable)
+        if (pageDragging && interactable)
         {
             UpdateBook();
         }
@@ -106,7 +107,7 @@ public class Book : MonoBehaviour {
     }
     public void UpdateBook()
     {
-        f= Vector3.Lerp(f,transformPoint( Input.mousePosition), Time.deltaTime * 10);
+        f = Vector3.Lerp(f, transformPoint(Input.mousePosition), Time.deltaTime * 10);
         if (mode == FlipMode.RightToLeft)
             UpdateBookRTLToPoint(f);
         else
@@ -126,14 +127,14 @@ public class Book : MonoBehaviour {
 
         c = Calc_C_Position(followLocation);
         Vector3 t1;
-        float T0_T1_Angle = Calc_T0_T1_Angle(c,ebl,out t1);
+        float T0_T1_Angle = Calc_T0_T1_Angle(c, ebl, out t1);
         if (T0_T1_Angle < 0) T0_T1_Angle += 180;
 
         ClippingPlane.transform.eulerAngles = new Vector3(0, 0, T0_T1_Angle - 90);
-        ClippingPlane.transform.position = BookPanel.TransformPoint(t1);
+        ClippingPlane.transform.position = BookPanel.TransformPoint(t1) + Vector3.back * 15;
 
         //page position and angle
-        Left.transform.position =BookPanel.TransformPoint( c);
+        Left.transform.position = BookPanel.TransformPoint(c);
         float C_T1_dy = t1.y - c.y;
         float C_T1_dx = t1.x - c.x;
         float C_T1_Angle = Mathf.Atan2(C_T1_dy, C_T1_dx) * Mathf.Rad2Deg;
@@ -155,41 +156,41 @@ public class Book : MonoBehaviour {
         Shadow.transform.localPosition = new Vector3(0, 0, 0);
         Shadow.transform.localEulerAngles = new Vector3(0, 0, 0);
         Right.transform.SetParent(ClippingPlane.transform, true);
-        
+
         Left.transform.SetParent(BookPanel.transform, true);
         RightNext.transform.SetParent(BookPanel.transform, true);
         c = Calc_C_Position(followLocation);
         Vector3 t1;
-        float T0_T1_Angle = Calc_T0_T1_Angle(c,ebr,out t1);
+        float T0_T1_Angle = Calc_T0_T1_Angle(c, ebr, out t1);
         if (T0_T1_Angle >= -90) T0_T1_Angle -= 180;
 
         ClippingPlane.rectTransform.pivot = new Vector2(1, 0.35f);
         ClippingPlane.transform.eulerAngles = new Vector3(0, 0, T0_T1_Angle + 90);
-        ClippingPlane.transform.position = BookPanel.TransformPoint(t1);
+        ClippingPlane.transform.position = BookPanel.TransformPoint(t1) + Vector3.back * 15;
 
         //page position and angle
-        Right.transform.position = BookPanel.TransformPoint(c);
+        Right.transform.position = BookPanel.TransformPoint(c) + Vector3.back * 25;
         float C_T1_dy = t1.y - c.y;
         float C_T1_dx = t1.x - c.x;
         float C_T1_Angle = Mathf.Atan2(C_T1_dy, C_T1_dx) * Mathf.Rad2Deg;
         Right.transform.eulerAngles = new Vector3(0, 0, C_T1_Angle);
 
         NextPageClip.transform.eulerAngles = new Vector3(0, 0, T0_T1_Angle + 90);
-        NextPageClip.transform.position = BookPanel.TransformPoint(t1);
+        NextPageClip.transform.position = BookPanel.TransformPoint(t1) + Vector3.back * 15;
         RightNext.transform.SetParent(NextPageClip.transform, true);
         Left.transform.SetParent(ClippingPlane.transform, true);
         Left.transform.SetAsFirstSibling();
 
         Shadow.rectTransform.SetParent(Right.rectTransform, true);
     }
-    private float Calc_T0_T1_Angle(Vector3 c,Vector3 bookCorner,out  Vector3 t1)
+    private float Calc_T0_T1_Angle(Vector3 c, Vector3 bookCorner, out Vector3 t1)
     {
         Vector3 t0 = (c + bookCorner) / 2;
         float T0_CORNER_dy = bookCorner.y - t0.y;
         float T0_CORNER_dx = bookCorner.x - t0.x;
         float T0_CORNER_Angle = Mathf.Atan2(T0_CORNER_dy, T0_CORNER_dx);
         float T0_T1_Angle = 90 - T0_CORNER_Angle;
-        
+
         float T1_X = t0.x - T0_CORNER_dy * Mathf.Tan(T0_CORNER_Angle);
         T1_X = normalizeT1X(T1_X, bookCorner, sb);
         t1 = new Vector3(T1_X, sb.y, 0);
@@ -200,7 +201,7 @@ public class Book : MonoBehaviour {
         T0_T1_Angle = Mathf.Atan2(T0_T1_dy, T0_T1_dx) * Mathf.Rad2Deg;
         return T0_T1_Angle;
     }
-    private float normalizeT1X(float t1,Vector3 corner,Vector3 sb)
+    private float normalizeT1X(float t1, Vector3 corner, Vector3 sb)
     {
         if (t1 > sb.x && sb.x > corner.x)
             return sb.x;
@@ -215,7 +216,7 @@ public class Book : MonoBehaviour {
         float F_SB_dy = f.y - sb.y;
         float F_SB_dx = f.x - sb.x;
         float F_SB_Angle = Mathf.Atan2(F_SB_dy, F_SB_dx);
-        Vector3 r1 = new Vector3(radius1 * Mathf.Cos(F_SB_Angle),radius1 * Mathf.Sin(F_SB_Angle), 0) + sb;
+        Vector3 r1 = new Vector3(radius1 * Mathf.Cos(F_SB_Angle), radius1 * Mathf.Sin(F_SB_Angle), 0) + sb;
 
         float F_SB_distance = Vector2.Distance(f, sb);
         if (F_SB_distance < radius1)
@@ -249,7 +250,7 @@ public class Book : MonoBehaviour {
         Left.transform.eulerAngles = new Vector3(0, 0, 0);
         Left.sprite = (currentPage < bookPages.Length) ? bookPages[currentPage] : background;
         Left.transform.SetAsFirstSibling();
-        
+
         Right.gameObject.SetActive(true);
         Right.transform.position = RightNext.transform.position;
         Right.transform.eulerAngles = new Vector3(0, 0, 0);
@@ -264,8 +265,8 @@ public class Book : MonoBehaviour {
     public void OnMouseDragRightPage()
     {
         if (interactable)
-        DragRightPageToPoint(transformPoint(Input.mousePosition));
-        
+            DragRightPageToPoint(transformPoint(Input.mousePosition));
+
     }
     public void DragLeftPageToPoint(Vector3 point)
     {
@@ -278,7 +279,7 @@ public class Book : MonoBehaviour {
         ClippingPlane.rectTransform.pivot = new Vector2(0, 0.35f);
 
         Right.gameObject.SetActive(true);
-        Right.transform.position = LeftNext.transform.position;
+        Right.transform.position = LeftNext.transform.position + Vector3.back * 25;
         Right.sprite = bookPages[currentPage - 1];
         Right.transform.eulerAngles = new Vector3(0, 0, 0);
         Right.transform.SetAsFirstSibling();
@@ -298,8 +299,8 @@ public class Book : MonoBehaviour {
     public void OnMouseDragLeftPage()
     {
         if (interactable)
-        DragLeftPageToPoint(transformPoint(Input.mousePosition));
-        
+            DragLeftPageToPoint(transformPoint(Input.mousePosition));
+
     }
     public void OnMouseRelease()
     {
@@ -324,15 +325,15 @@ public class Book : MonoBehaviour {
     Coroutine currentCoroutine;
     void UpdateSprites()
     {
-        LeftNext.sprite= (currentPage > 0 && currentPage <= bookPages.Length) ? bookPages[currentPage-1] : background;
-        RightNext.sprite=(currentPage>=0 &&currentPage<bookPages.Length) ? bookPages[currentPage] : background;
+        LeftNext.sprite = (currentPage > 0 && currentPage <= bookPages.Length) ? bookPages[currentPage - 1] : background;
+        RightNext.sprite = (currentPage >= 0 && currentPage < bookPages.Length) ? bookPages[currentPage] : background;
     }
     public void TweenForward()
     {
-        if(mode== FlipMode.RightToLeft)
-        currentCoroutine = StartCoroutine(TweenTo(ebl, 0.15f, () => { Flip(); }));
+        if (mode == FlipMode.RightToLeft)
+            currentCoroutine = StartCoroutine(TweenTo(ebl, 0.15f, () => { Flip(); }));
         else
-        currentCoroutine = StartCoroutine(TweenTo(ebr, 0.15f, () => { Flip(); }));
+            currentCoroutine = StartCoroutine(TweenTo(ebr, 0.15f, () => { Flip(); }));
     }
     void Flip()
     {
@@ -357,7 +358,7 @@ public class Book : MonoBehaviour {
     {
         if (mode == FlipMode.RightToLeft)
         {
-            currentCoroutine = StartCoroutine(TweenTo(ebr,0.15f,
+            currentCoroutine = StartCoroutine(TweenTo(ebr, 0.15f,
                 () =>
                 {
                     UpdateSprites();
@@ -391,10 +392,10 @@ public class Book : MonoBehaviour {
     {
         int steps = (int)(duration / 0.025f);
         Vector3 displacement = (to - f) / steps;
-        for (int i = 0; i < steps-1; i++)
+        for (int i = 0; i < steps - 1; i++)
         {
-            if(mode== FlipMode.RightToLeft)
-            UpdateBookRTLToPoint( f + displacement);
+            if (mode == FlipMode.RightToLeft)
+                UpdateBookRTLToPoint(f + displacement);
             else
                 UpdateBookLTRToPoint(f + displacement);
 
