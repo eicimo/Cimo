@@ -4,6 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class WordsMananger : MonoBehaviour {
+    public Sprite trueSprite;
+    public Sprite falseSprite;
+    public Sprite emptySprite;
+    public GameObject[] tofList;
+    public GameObject[] tofList2;
+    private Image[] tofListImg2 = new Image[4]; 
+    private Image[] tofListImg = new Image[4];
+
     public int maxPage = 8;
     //绑定左右选项
     public Text[] choicesRight;
@@ -44,6 +52,14 @@ public class WordsMananger : MonoBehaviour {
         meansR = meansList[1];
         SyncChoiceWithStrR();
         SyncChoiceWithStrL();
+        for (int i = 0; i < 4; i++)
+        {
+            tofListImg[i] = tofList[i].GetComponent<Image>();
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            tofListImg2[i] = tofList2[i].GetComponent<Image>();
+        }
     }
 	
     //初始化单词列表
@@ -91,11 +107,32 @@ public class WordsMananger : MonoBehaviour {
         maskR.SetActive(false);
         meansL = meansR;
         SyncChoiceWithStrL();
+        foreach (GameObject item in tofList2)
+        {
+            item.SetActive(false);
+        }
+        foreach (Image item in tofListImg2)
+        {
+            item.sprite = emptySprite;
+        }
     }
 
     //开始翻动执行
     public void OnStartFilp()
     {
+        foreach (GameObject item in tofList)
+        {
+            item.SetActive(false);
+            
+        }
+        foreach (Image item in tofListImg)
+        {
+            item.sprite = emptySprite;
+        }
+        foreach (GameObject item in tofList2)
+        {
+            item.SetActive(true);
+        }
         maskR.SetActive(true);
         //防止翻过头报错
         if (book.currentPage >= maxPage)
@@ -140,7 +177,17 @@ public class WordsMananger : MonoBehaviour {
     public void OnClickButton(int ans)
     {
         ansNumber = ansList[book.currentPage / 2 - 1];
-        if (ans == ansNumber) Debug.Log("true");
-        else Debug.Log("false");
+        if (ans == ansNumber)
+        {
+            tofList[ans].SetActive(true);
+            tofListImg[ans].sprite = trueSprite;
+            tofListImg2[ans].sprite = trueSprite;
+        }
+        else
+        {
+            tofList[ans].SetActive(true);
+            tofListImg[ans].sprite = falseSprite;
+            tofListImg2[ans].sprite = falseSprite;
+        }
     }
 }
