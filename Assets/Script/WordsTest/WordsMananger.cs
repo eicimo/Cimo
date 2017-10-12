@@ -67,20 +67,20 @@ public class WordsMananger : MonoBehaviour {
     {
         choiceList = new List<string[]>(4);
         choiceList.Add( new string[] { "pause", "challenge", "shear", "hang" });
-        choiceList.Add( new string[] { "1", "2", "3", "4" });
-        choiceList.Add( new string[] { "m", "n", "p", "q" });
-        choiceList.Add( new string[] { "e", "d", "p", "g" });
+        choiceList.Add( new string[] { "accommodate", "accomplish", "accord", "accessory" });
+        choiceList.Add( new string[] { "allowance", "ambiguous", "alter", "allege" });
+        choiceList.Add( new string[] { "coincide", "coarse", "bubble", "avail" });
 
         meansList = new List<string>(4);
         meansList.Add( "n.剪切，剪刀；vi.剪切，修剪，穿越；vt.剪去，剥夺");
-        meansList.Add( "number-1");
-        meansList.Add("mnpq-n");
-        meansList.Add( "edfg-p");
+        meansList.Add( "vt.容纳；向……提供住处；使适应");
+        meansList.Add("vt.改变，变更，变动");
+        meansList.Add( "adj.粗的，粗糙的；粗劣的；粗俗的");
 
         ansListStr.Add("shear");
-        ansListStr.Add("1");
-        ansListStr.Add("n");
-        ansListStr.Add("p");
+        ansListStr.Add("accommodate");
+        ansListStr.Add("alter");
+        ansListStr.Add("coarse");
 
         int choiceListSize = choiceList.Count;
         for (int i = 0; i < choiceListSize; i++)
