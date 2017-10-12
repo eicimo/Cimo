@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WordsMananger : MonoBehaviour
-{
+public class WordsMananger : MonoBehaviour {
     public int maxPage = 8;
     //绑定左右选项
     public Text[] choicesRight;
@@ -31,8 +30,10 @@ public class WordsMananger : MonoBehaviour
 
     private int ansNumber = 0;
 
+    public GameObject maskR;
+
     // Use this for initialization
-    void Awake()
+    void Awake ()
     {
 
         book = GetComponent<Book>();
@@ -44,21 +45,21 @@ public class WordsMananger : MonoBehaviour
         SyncChoiceWithStrR();
         SyncChoiceWithStrL();
     }
-
+	
     //初始化单词列表
     void InitChoiceList()
     {
         choiceList = new List<string[]>(4);
-        choiceList.Add(new string[] { "pause", "challenge", "shear", "hang" });
-        choiceList.Add(new string[] { "1", "2", "3", "4" });
-        choiceList.Add(new string[] { "m", "n", "p", "q" });
-        choiceList.Add(new string[] { "e", "d", "p", "g" });
+        choiceList.Add( new string[] { "pause", "challenge", "shear", "hang" });
+        choiceList.Add( new string[] { "1", "2", "3", "4" });
+        choiceList.Add( new string[] { "m", "n", "p", "q" });
+        choiceList.Add( new string[] { "e", "d", "p", "g" });
 
         meansList = new List<string>(4);
-        meansList.Add("n.剪切，剪刀；vi.剪切，修剪，穿越；vt.剪去，剥夺");
-        meansList.Add("number-1");
+        meansList.Add( "n.剪切，剪刀；vi.剪切，修剪，穿越；vt.剪去，剥夺");
+        meansList.Add( "number-1");
         meansList.Add("mnpq-n");
-        meansList.Add("edfg-p");
+        meansList.Add( "edfg-p");
 
         ansListStr.Add("shear");
         ansListStr.Add("1");
@@ -70,7 +71,7 @@ public class WordsMananger : MonoBehaviour
         {
             for (int j = 0; j < 4; j++)
             {
-                if (choiceList[i][j] == ansListStr[i])
+                if(choiceList[i][j] == ansListStr[i])
                 {
                     ansList.Add(j);
                     break;
@@ -79,15 +80,15 @@ public class WordsMananger : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+	// Update is called once per frame
+	void Update () {
 
-    }
+	}
 
     //结束翻动执行
     public void OnEndFilp()
     {
+        maskR.SetActive(false);
         meansL = meansR;
         SyncChoiceWithStrL();
     }
@@ -95,6 +96,7 @@ public class WordsMananger : MonoBehaviour
     //开始翻动执行
     public void OnStartFilp()
     {
+        maskR.SetActive(true);
         //防止翻过头报错
         if (book.currentPage >= maxPage)
         {
