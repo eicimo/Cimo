@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Assets",
+    "\\Assets\\Scene"
   ],
-  "SelectedNode": "\\Cimo.sln",
+  "SelectedNode": "\\Assets\\Scene\\Menu.unity",
   "PreviewInSolutionExplorer": false
 }
