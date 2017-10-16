@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class MonsterStatementControl : MonoBehaviour {
     public Slider sld;
-    public Animator ani;
+    public Slider sld_pla;
+    public Animator aniMon;
+    public Animator aniPla;
 	// Use this for initialization
 	void Start () {
 		
@@ -13,6 +15,10 @@ public class MonsterStatementControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        ani.SetInteger("MonsterScore", (int)sld.value);
-	}
+        aniMon.SetInteger("MonsterScore", (int)sld.value);
+        aniMon.SetInteger("PlayerScore", (int)sld_pla.value);
+        aniPla.SetInteger("MonsterScore", (int)sld.value);
+        aniPla.SetInteger("PlayerScore", (int)sld_pla.value);
+        aniPla.SetInteger("diff", (int)(sld.value - sld_pla.value));
+    }
 }
