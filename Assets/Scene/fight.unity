@@ -342,8 +342,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 137350339}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 346, y: 159, z: 0}
-  m_LocalScale: {x: 0.865, y: 0.865, z: 0.865}
+  m_LocalPosition: {x: 282.5, y: 159, z: 0}
+  m_LocalScale: {x: 0.70625, y: 0.70625, z: 0.70625}
   m_Children:
   - {fileID: 563717238}
   - {fileID: 586476405}
@@ -608,7 +608,7 @@ MonoBehaviour:
   Monster: {fileID: 855929079}
   Player: {fileID: 130158121}
   canvas: {fileID: 137350342}
-  waitTime: 0.5
+  waitTime: 0.25
   PosNum: 4
   totalCount: 1
   meansNow: 
@@ -1093,11 +1093,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4884927278195812, guid: f3424b90a88e5a74b8cb5a9c1feeaa7d, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 5.21
+      value: 5.43
       objectReference: {fileID: 0}
     - target: {fileID: 4884927278195812, guid: f3424b90a88e5a74b8cb5a9c1feeaa7d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.08
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 4884927278195812, guid: f3424b90a88e5a74b8cb5a9c1feeaa7d, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1122,6 +1122,18 @@ Prefab:
     - target: {fileID: 4884927278195812, guid: f3424b90a88e5a74b8cb5a9c1feeaa7d, type: 2}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4884927278195812, guid: f3424b90a88e5a74b8cb5a9c1feeaa7d, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 2.5902221
+      objectReference: {fileID: 0}
+    - target: {fileID: 4884927278195812, guid: f3424b90a88e5a74b8cb5a9c1feeaa7d, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 2.5902221
+      objectReference: {fileID: 0}
+    - target: {fileID: 4884927278195812, guid: f3424b90a88e5a74b8cb5a9c1feeaa7d, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 2.5902221
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f3424b90a88e5a74b8cb5a9c1feeaa7d, type: 2}
