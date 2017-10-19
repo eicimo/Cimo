@@ -7,24 +7,29 @@ using UnityEngine.EventSystems;
 
 public class ScoreControl : MonoBehaviour
 {
+    public GameObject textEar;
+    public GameObject textPlayer;
+    TextMesh textEarT;
+    TextMesh textPlayerT;
+
     public int MonsterScore;
     public int PlayerScore;
     public Animator Monster;
     public Animator Player;
 
     public Canvas canvas;
-    
+    public float emptyWaitTime = 0.5f;
     public void OnClickBoom(PointerEventData id, int t) {
         var chosen = id.pointerCurrentRaycast.gameObject;
         var text = chosen.GetComponentInChildren<Text>();
         //清除气泡
         foreach (var item in boom) {
-            DestroyImmediate(item);
-            
+
+            if (item != chosen) StartCoroutine(WaitAndDestroy(item));
+            else StartCoroutine(WaitAndDestroyMaster(item));
         }
 
         if (text.text == pernouncationList[t]) {
-
             //PlayerScore += 10;
             Debug.Log("t!");
             StartCoroutine(WaitAndRight(t));
@@ -38,29 +43,40 @@ public class ScoreControl : MonoBehaviour
     }
     public float waitTime = 1;
     IEnumerator WaitAndRight(int t) {
-        if (t + 1 >= pernouncationList.Count) {
-            PlayerWin = true;
-            PlayerScore += 10;
-            Debug.Log("结束了！");
-            //StopCoroutine("MonsterScoreUp");
-            yield return new WaitForSeconds(waitTime);
-            //StopCoroutine(MonsterScoreUp());
-            //StartTurn();
-            //yield break;
-        }
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime + emptyWaitTime);
 
         StartBoom(t + 1);
     }
 
     IEnumerator WaitAndWrong(int t) {
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime + emptyWaitTime);
 
         StartBoom(t);
     }
-    
+
+    IEnumerator WaitAndDestroy(GameObject obj) {
+        for (int i = 0; i < 10; i++) {
+            yield return new WaitForSeconds(waitTime / 20);
+            if (obj) obj.transform.localScale -= new Vector3(0.08f, 0.08f, 0.08f);
+        }
+        DestroyImmediate(obj);
+    }
+
+    IEnumerator WaitAndDestroyMaster(GameObject obj) {
+        for (int i = 0; i < 10; i++) {
+            yield return new WaitForSeconds(waitTime / 20);
+            if (obj) obj.transform.localScale += new Vector3(0.08f, 0.08f, 0.08f);
+        }
+        for (int i = 0; i < 8; i++) {
+            yield return new WaitForSeconds(waitTime / 20);
+            if (obj) obj.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+        }
+        DestroyImmediate(obj);
+    }
+
     public int PosNum;                                          //选项数目
     void Awake() {
+
         for (int i = 0; i < PosNum; i++) {
             RectTransform t = PosDataObj[i].GetComponent<RectTransform>();
             posData[i] = t.position;        //position世界坐标,rect本地坐标
@@ -82,6 +98,9 @@ public class ScoreControl : MonoBehaviour
     public bool PlayerWin = false;
 
     void Start() {
+
+        textEarT = textEar.GetComponent<TextMesh>();
+        textPlayerT = textPlayer.GetComponent<TextMesh>();
         MonsterWin = false;
         PlayerWin = false;
         StartTurn();
@@ -92,35 +111,30 @@ public class ScoreControl : MonoBehaviour
         Monster.SetInteger("PlayerScore", PlayerScore);
         Player.SetInteger("MonsterScore", MonsterScore);
         Player.SetInteger("PlayerScore", PlayerScore);
+        if(textEarT.text!=MonsterScore.ToString()) {
+            textEarT.text = MonsterScore.ToString();
+        }
+        if (textPlayerT.text != PlayerScore.ToString()) {
+            textPlayerT.text = PlayerScore.ToString();
+        }
         if (boom.Count > 4) {
             Debug.Log("?");
         }
-
-        if(PlayerWin) {
-            Debug.Log("PlayerWinNextTurn");
-            PlayerWin = false;
-            StartTurn();
-            
-        }
-
         if (MonsterWin) {
-            Debug.Log("NextTurn");
             //清除气泡
             foreach (var item in boom) {
                 DestroyImmediate(item);
+
             }
             MonsterWin = false;
-            StartTurn();
-            
-            ////PlayerWin = false;
-            //StartCoroutine(MonsterScoreUp());
-            //StartCoroutine(WaitAndNext());
+            PlayerWin = false;
+
+            StartCoroutine(WaitAndNext());
         }
-        
     }
     IEnumerator WaitAndNext() {
         yield return new WaitForSeconds(waitTime);
-        StartBoom(time);
+        StartTurn();
         /*
          * 
          * 这里因为只有一组数据才选择time，若有多组更改为++time
@@ -128,43 +142,47 @@ public class ScoreControl : MonoBehaviour
          * 
          * */
     }
+
+    public float monsterWaitTime = 8f;
     //控制怪物分数自然增长
     IEnumerator MonsterScoreUp() {
         for (int i = 0; i < 10; i++) {
-            if (PlayerWin) {
-                Debug.Log("MonsterScoreUpEnd");
-                PlayerWin = false;
-                yield break;
-            }
-            yield return new WaitForSeconds(1);
-            if (PlayerWin) {
-                Debug.Log("MonsterScoreUpEnd");
-                PlayerWin = false;
-                yield break;
-            }
+            if (PlayerWin) yield break;
+            yield return new WaitForSeconds(monsterWaitTime / 10);
         }
         MonsterScore += 10;
         MonsterWin = true;
     }
-
+    public int turn = 0;
+    public int maxTurn = 10;
     //开始某一回合
     void StartTurn() {
+        if (turn >= maxTurn) {
+            Debug.Log("游戏结束");
+            return;
+        }
         InitList(0);                                                       //初始化本回合列表
-        StartCoroutine(MonsterScoreUp());               //开始一个计算怪物倒计时的协程
-        StartBoom(time);                                           //实例化气泡
+        PlayerWin = false;
+        StartCoroutine(MonsterScoreUp());
+        StartBoom(time);
+
 
     }
 
-
     void StartBoom(int times) {
+
         foreach (var item in boom) {
-            DestroyImmediate(item);
+            if (item) DestroyImmediate(item);
 
         }
         boom.Clear();
         if (times >= pernouncationList.Count) {
-            //PlayerWin = true;
-            //PlayerScore += 10;
+            PlayerScore += 10;
+            PlayerWin = true;
+            StopAllCoroutines();
+            Debug.Log("结束了！");
+            turn++;
+            StartTurn();
             return;
         }
         GetWrongList(0);                                            //初始化错误列表
