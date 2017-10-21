@@ -43,9 +43,19 @@ public class ScoreControl : MonoBehaviour
     }
     public float waitTime = 1;
     IEnumerator WaitAndRight(int t) {
+        if (t + 1 >= pernouncationList.Count) {
+            StartBoom(t + 1);
+            yield break;
+        }
         yield return new WaitForSeconds(waitTime + emptyWaitTime);
 
         StartBoom(t + 1);
+    }
+
+    delegate void WaitAndToDo();
+    IEnumerator WaitAndToDoSth(float waitTime, WaitAndToDo w) {
+        yield return new WaitForSeconds(waitTime);
+        w();
     }
 
     IEnumerator WaitAndWrong(int t) {
@@ -111,7 +121,7 @@ public class ScoreControl : MonoBehaviour
         Monster.SetInteger("PlayerScore", PlayerScore);
         Player.SetInteger("MonsterScore", MonsterScore);
         Player.SetInteger("PlayerScore", PlayerScore);
-        if(textEarT.text!=MonsterScore.ToString()) {
+        if (textEarT.text != MonsterScore.ToString()) {
             textEarT.text = MonsterScore.ToString();
         }
         if (textPlayerT.text != PlayerScore.ToString()) {
@@ -120,17 +130,17 @@ public class ScoreControl : MonoBehaviour
         if (boom.Count > 4) {
             Debug.Log("?");
         }
-        if (MonsterWin) {
-            //清除气泡
-            foreach (var item in boom) {
-                DestroyImmediate(item);
+        //if (MonsterWin) {
+        //    //清除气泡
+        //    foreach (var item in boom) {
+        //        DestroyImmediate(item);
 
-            }
-            MonsterWin = false;
-            PlayerWin = false;
+        //    }
+        //    MonsterWin = false;
+        //    PlayerWin = false;
 
-            StartCoroutine(WaitAndNext());
-        }
+        //    StartCoroutine(WaitAndNext());
+        //}
     }
     IEnumerator WaitAndNext() {
         yield return new WaitForSeconds(waitTime);
@@ -144,14 +154,27 @@ public class ScoreControl : MonoBehaviour
     }
 
     public float monsterWaitTime = 8f;
+    IEnumerator MonsterScoreUpV;
     //控制怪物分数自然增长
     IEnumerator MonsterScoreUp() {
         for (int i = 0; i < 10; i++) {
             if (PlayerWin) yield break;
             yield return new WaitForSeconds(monsterWaitTime / 10);
         }
-        MonsterScore += 10;
-        MonsterWin = true;
+        if (PlayerWin) yield break;
+        else {
+            MonsterScore += 10;
+            MonsterWin = true;
+        }
+        //清除气泡        
+        MonsterWin = false;
+        PlayerWin = false;
+        foreach (var item in boom) {
+            StartCoroutine(WaitAndDestroy(item));
+        }
+
+
+        StartCoroutine(WaitAndToDoSth(waitTime+emptyWaitTime,StartTurn));
     }
     public int turn = 0;
     public int maxTurn = 10;
@@ -163,28 +186,34 @@ public class ScoreControl : MonoBehaviour
         }
         InitList(0);                                                       //初始化本回合列表
         PlayerWin = false;
-        StartCoroutine(MonsterScoreUp());
+        MonsterScoreUpV = MonsterScoreUp();
+        StartCoroutine(MonsterScoreUpV);
         StartBoom(time);
 
 
     }
-
-    void StartBoom(int times) {
-
+    delegate void JustDo();
+    void DeleteAll() {
         foreach (var item in boom) {
             if (item) DestroyImmediate(item);
 
         }
         boom.Clear();
+    }
+    void StartBoom(int times) {
+
         if (times >= pernouncationList.Count) {
             PlayerScore += 10;
             PlayerWin = true;
-            StopAllCoroutines();
+            StopCoroutine(MonsterScoreUpV);
             Debug.Log("结束了！");
             turn++;
-            StartTurn();
+            StartCoroutine(WaitAndToDoSth(waitTime, DeleteAll));
+            StartCoroutine(WaitAndToDoSth(waitTime + emptyWaitTime, StartTurn));
+
             return;
         }
+        DeleteAll();
         GetWrongList(0);                                            //初始化错误列表
         int numid = Random.Range(0, PosNum);
         for (int i = 0; i < PosNum; i++) {

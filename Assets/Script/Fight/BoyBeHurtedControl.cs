@@ -5,7 +5,7 @@ using UnityEngine.Timeline;
 using UnityEngine.Playables;
 
 
-public class BoyBeHurtedControl  : BasicPlayableBehaviour
+public class BoyBeHurtedControl  : PlayableBehaviour
 {
     public GameObject hitboy;
 

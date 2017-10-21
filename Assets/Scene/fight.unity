@@ -632,7 +632,7 @@ MonoBehaviour:
   boom: []
   MonsterWin: 0
   PlayerWin: 0
-  monsterWaitTime: 8
+  monsterWaitTime: 12
   turn: 0
   maxTurn: 10
 --- !u!1 &491105004
