@@ -611,7 +611,6 @@ MonoBehaviour:
   Player: {fileID: 130158121}
   canvas: {fileID: 137350342}
   emptyWaitTime: 0.5
-  waitTime: 0.18
   PosNum: 4
   totalCount: 1
   meansNow: 
@@ -632,9 +631,10 @@ MonoBehaviour:
   boom: []
   MonsterWin: 0
   PlayerWin: 0
-  monsterWaitTime: 12
+  waitTime: 0.18
   turn: 0
   maxTurn: 10
+  monsterWaitTime: 12
 --- !u!1 &491105004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1123,7 +1123,7 @@ TextMesh:
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 4
-  m_FontSize: 0
+  m_FontSize: 64
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -1171,8 +1171,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 937893525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.24, y: -4.08, z: -0.35180974}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.66, y: -3.76, z: -0}
+  m_LocalScale: {x: 0.28834552, y: 0.2883455, z: 0.2883455}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
@@ -1402,7 +1402,7 @@ TextMesh:
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 4
-  m_FontSize: 0
+  m_FontSize: 64
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -1450,8 +1450,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1479153356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.77, y: -4.09, z: -0.35180974}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4.05, y: -3.68, z: -0.35180974}
+  m_LocalScale: {x: 0.2819509, y: 0.2819509, z: 0.2819509}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
